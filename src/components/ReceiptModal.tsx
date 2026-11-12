@@ -27,19 +27,19 @@ export default function ReceiptModal({ isOpen, transaction, onClose }: ReceiptMo
   return (
     <>
       {/* Modal Backdrop (visible on screen, hidden on print) */}
-      <div className="modal fade show d-block no-print" tabIndex={-1} style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}>
+      <div className="modal fade show d-block no-print" tabIndex={-1} style={{ backgroundColor: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(4px)' }}>
         <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '420px' }}>
-          <div className="modal-content bg-pizza-card border border-pizza text-white">
-            <div className="modal-header border-bottom border-pizza">
-              <h5 className="modal-title fw-bold text-orange">
-                <i className="bi bi-receipt me-2"></i>Transaksi Berhasil
+          <div className="modal-content bg-white border border-slate-200 shadow-sm text-slate-900 rounded-2xl">
+            <div className="modal-header border-bottom border-slate-200">
+              <h5 className="modal-title font-bold text-slate-900">
+                <i className="bi bi-receipt me-2 text-slate-900"></i>Transaksi Berhasil
               </h5>
               <button type="button" className="btn-close" onClick={onClose}></button>
             </div>
             
-            <div className="modal-body p-4" style={{ fontFamily: 'monospace' }}>
+            <div className="modal-body p-4 bg-slate-50" style={{ fontFamily: 'monospace' }}>
               {/* Receipt Template (Screen View) */}
-              <div className="bg-white text-dark p-3 rounded shadow-sm border" id="printable-receipt">
+              <div className="bg-white text-slate-900 p-3 rounded-xl shadow-sm border border-slate-200" id="printable-receipt">
                 <div className="text-center mb-3">
                   <h4 className="fw-bold m-0" style={{ letterSpacing: '2px' }}>GILANG PIZZA</h4>
                   <small className="text-muted">Jl. Pizza Raya No. 42, Jakarta</small>
@@ -63,8 +63,22 @@ export default function ReceiptModal({ isOpen, transaction, onClose }: ReceiptMo
                   </div>
                   <div className="d-flex justify-content-between">
                     <span>Metode:</span>
-                    <span>Tunai (Cash)</span>
+                    <span className="fw-semibold">
+                      {transaction.paymentMethod === 'qris'
+                        ? 'QRIS'
+                        : transaction.paymentMethod === 'gofood'
+                        ? 'GoFood'
+                        : transaction.paymentMethod === 'grabfood'
+                        ? 'GrabFood'
+                        : 'Tunai (Cash)'}
+                    </span>
                   </div>
+                  {transaction.referenceId && (
+                    <div className="d-flex justify-content-between">
+                      <span>No. Resi/ID:</span>
+                      <span className="fw-bold">{transaction.referenceId}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="border-bottom border-dark border-dashed mb-2"></div>
@@ -128,12 +142,12 @@ export default function ReceiptModal({ isOpen, transaction, onClose }: ReceiptMo
               </div>
             </div>
 
-            <div className="modal-footer border-top border-pizza gap-2">
-              <button type="button" className="btn btn-outline-secondary border-pizza flex-grow-1" onClick={onClose}>
+            <div className="modal-footer border-top border-slate-200 bg-white gap-2" style={{ borderRadius: '0 0 16px 16px' }}>
+              <button type="button" className="btn btn-outline-secondary border-slate-200 text-slate-700 hover:bg-slate-100 flex-grow-1" onClick={onClose}>
                 <i className="bi bi-x-circle me-2"></i>Tutup
               </button>
-              <button type="button" className="btn btn-pizza-primary flex-grow-1" onClick={handlePrint}>
-                <i className="bi bi-printer me-2"></i>Cetak Struk
+              <button type="button" className="btn bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold border-0 flex-grow-1 shadow-sm" onClick={handlePrint}>
+                <i className="bi bi-printer me-2 text-slate-900"></i>Cetak Struk
               </button>
             </div>
           </div>
@@ -156,7 +170,17 @@ export default function ReceiptModal({ isOpen, transaction, onClose }: ReceiptMo
           <div>No. Struk: {transaction.id}</div>
           <div>Waktu: {new Date(transaction.timestamp).toLocaleString('id-ID')}</div>
           <div>Kasir: {transaction.cashier}</div>
-          <div>Metode: Tunai (Cash)</div>
+          <div>
+            Metode:{' '}
+            {transaction.paymentMethod === 'qris'
+              ? 'QRIS'
+              : transaction.paymentMethod === 'gofood'
+              ? 'GoFood'
+              : transaction.paymentMethod === 'grabfood'
+              ? 'GrabFood'
+              : 'Tunai (Cash)'}
+          </div>
+          {transaction.referenceId && <div>Ref/ID: {transaction.referenceId}</div>}
         </div>
 
         <div style={{ borderBottom: '1px dashed black', margin: '8px 0' }}></div>

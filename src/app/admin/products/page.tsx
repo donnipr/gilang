@@ -211,25 +211,25 @@ export default function ProductsCRUDPage() {
 
   return (
     <>
-      <div className="d-flex flex-column flex-md-row text-white min-vh-100">
+      <div className="d-flex flex-column flex-md-row text-slate-900 bg-slate-50 min-vh-100">
         {/* Sidebar Navigasi */}
         <Sidebar />
 
         {/* Main Container CRUD */}
-        <main className="flex-grow-1 p-4 bg-pizza-bg main-content-responsive">
+        <main className="flex-grow-1 p-4 bg-slate-50 main-content-responsive">
 
           {/* Header Modul */}
           <header className="d-flex justify-content-between align-items-center mb-4 gap-3 flex-wrap">
             <div>
-              <h1 className="h3 fw-bold m-0">Kelola Daftar Menu & Produk</h1>
-              <p className="text-muted m-0" style={{ fontSize: '0.9rem' }}>
+              <h1 className="h3 font-bold m-0 text-slate-900">Kelola Daftar Menu & Produk</h1>
+              <p className="text-slate-500 m-0" style={{ fontSize: '0.9rem' }}>
                 Tambah, edit, dan hapus item produk kasir {isDbConnected ? 'yang tersinkronisasi ke Supabase' : 'dalam mode Local Storage'}
               </p>
             </div>
 
             <div className="d-flex gap-2 align-items-center flex-wrap">
               <button
-                className="btn btn-outline-secondary d-flex align-items-center gap-2 py-2 px-3 shadow-sm"
+                className="btn bg-white border border-slate-200 text-slate-900 hover:bg-slate-100 d-flex align-items-center gap-2 py-2 px-3 shadow-sm"
                 onClick={async () => {
                   if (confirm('Apakah Anda yakin ingin mengatur ulang seluruh menu ke daftar Pizza & Toppings Gilang yang baru? Ini akan menghapus data menu kustom Anda saat ini.')) {
                     const ok = await resetMenuToDefault();
@@ -238,16 +238,16 @@ export default function ProductsCRUDPage() {
                 }}
                 style={{ borderRadius: '12px', fontSize: '0.9rem' }}
               >
-                <i className="bi bi-arrow-counterclockwise fs-5 text-orange"></i>
+                <i className="bi bi-arrow-counterclockwise fs-5 text-slate-900"></i>
                 <span>Reset ke Menu Gilang</span>
               </button>
 
               <button
-                className="btn btn-pizza-primary d-flex align-items-center gap-2 py-2 px-3 shadow shadow-sm"
+                className="btn bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold d-flex align-items-center gap-2 py-2 px-3 shadow-sm border-0"
                 onClick={handleOpenCreate}
                 style={{ borderRadius: '12px', fontSize: '0.9rem' }}
               >
-                <i className="bi bi-plus-lg fs-5"></i>
+                <i className="bi bi-plus-lg fs-5 text-slate-900"></i>
                 <span>Tambah Produk Baru</span>
               </button>
             </div>

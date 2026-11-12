@@ -10,6 +10,7 @@ export interface PizzaItem {
   category: 'pizza' | 'sides' | 'beverage';
   image: string;
   description: string;
+  stock?: number;
 }
 
 export interface CartItem {
@@ -36,7 +37,14 @@ export interface Transaction {
   total: number;
   payment: number;
   change: number;
+  paymentMethod?: 'tunai' | 'qris' | 'gofood' | 'grabfood';
+  referenceId?: string;
   isSynced: boolean; // True if saved to Supabase, False if local storage fallback
+}
+
+export interface CheckoutOptions {
+  paymentMethod?: 'tunai' | 'qris' | 'gofood' | 'grabfood';
+  referenceId?: string;
 }
 
 interface CartContextType {
@@ -49,7 +57,7 @@ interface CartContextType {
   updateQuantity: (productId: string, quantity: number) => void;
   updateNotes: (productId: string, notes: string) => void;
   clearCart: () => void;
-  checkout: (paymentAmount: number, cashierName: string) => Promise<Transaction | null>;
+  checkout: (paymentAmount: number, cashierName: string, options?: CheckoutOptions) => Promise<Transaction | null>;
   isDbConnected: boolean;
   loadTransactions: () => Promise<void>;
   loadMenu: () => Promise<void>;
@@ -226,7 +234,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             price: Number(p.price),
             category: p.category as 'pizza' | 'sides' | 'beverage',
             image: p.image || '/images/placeholder.png',
-            description: p.description || ''
+            description: p.description || '',
+            stock: p.stock !== undefined && p.stock !== null ? Number(p.stock) : p.stok !== undefined && p.stok !== null ? Number(p.stok) : undefined
           }));
           connected = true;
         } else {
@@ -286,12 +295,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             cashier: t.cashier,
             items: typeof t.items === 'string' ? JSON.parse(t.items) : t.items,
             totalItems: t.total_items,
-            subtotal: Number(t.subtotal),
-            tax: Number(t.tax),
-            serviceCharge: Number(t.service_charge),
-            total: Number(t.total_amount),
-            payment: Number(t.payment_amount),
-            change: Number(t.change_amount),
+            subtotal: Number(t.subtotal || 0),
+            tax: Number(t.tax || 0),
+            serviceCharge: Number(t.service_charge || 0),
+            total: Number(t.total_amount || 0),
+            payment: Number(t.amount_received ?? t.payment_amount ?? t.total_amount ?? 0),
+            change: Number(t.change ?? t.change_amount ?? 0),
+            paymentMethod: t.payment_method || 'tunai',
+            referenceId: t.reference_id || '',
             isSynced: true
           }));
           setIsDbConnected(true);
@@ -501,16 +512,25 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const clearCart = () => setCart([]);
 
   // ---------- CHECKOUT – SIMPAN KE SUPABASE ----------
-  const checkout = async (paymentAmount: number, cashierName: string): Promise<Transaction | null> => {
+  const checkout = async (
+    paymentAmount: number,
+    cashierName: string,
+    options?: CheckoutOptions
+  ): Promise<Transaction | null> => {
     if (cart.length === 0) return null;
+
+    const paymentMethod = options?.paymentMethod || 'tunai';
+    const referenceId = options?.referenceId || null;
 
     const subtotal = cart.reduce((acc, curr) => acc + curr.item.price * curr.quantity, 0);
     const tax = Math.round(subtotal * 0.1); // Pajak 10%
     const serviceCharge = Math.round(subtotal * 0.05); // Biaya Layanan 5%
     const total = subtotal + tax + serviceCharge;
-    const change = paymentAmount - total;
 
-    if (change < 0) {
+    const effectivePayment = paymentMethod === 'tunai' ? paymentAmount : total;
+    const change = paymentMethod === 'tunai' ? (paymentAmount - total) : 0;
+
+    if (paymentMethod === 'tunai' && change < 0) {
       alert('Nominal pembayaran kurang!');
       return null;
     }
@@ -541,16 +561,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       tax,
       serviceCharge,
       total,
-      payment: paymentAmount,
+      payment: effectivePayment,
       change,
+      paymentMethod,
+      referenceId: referenceId || undefined,
       isSynced: false
     };
 
     // Coba simpan ke Supabase jika dikonfigurasi
     if (isSupabaseConfigured && supabase) {
       try {
-        // 1) Simpan header transaksi
-        const { error: txError } = await supabase.from('transactions').insert({
+        // 1) Simpan header transaksi dengan payload lengkap
+        const fullPayload = {
           receipt_no: receiptNo,
           cashier: newTx.cashier,
           total_items: totalItems,
@@ -558,15 +580,35 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           tax,
           service_charge: serviceCharge,
           total_amount: total,
-          payment_amount: paymentAmount,
+          payment_method: paymentMethod,
+          amount_received: paymentMethod === 'tunai' ? paymentAmount : null,
+          change: paymentMethod === 'tunai' ? change : null,
+          reference_id: referenceId,
+          payment_amount: effectivePayment,
           change_amount: change,
-          items: formattedItems,  // JSONB – langsung kirim object
+          items: formattedItems,
           created_at: timestamp
-        });
+        };
+
+        let { error: txError } = await supabase.from('transactions').insert(fullPayload);
+
+        // Fallback retry jika tabel hanya berisi kolom esensial spesifikasi
+        if (txError) {
+          console.warn('Gagal insert data lengkap ke tabel transactions, mencoba insert kolom inti:', txError.message);
+          const minimalPayload = {
+            total_amount: total,
+            payment_method: paymentMethod,
+            amount_received: paymentMethod === 'tunai' ? paymentAmount : null,
+            change: paymentMethod === 'tunai' ? change : null,
+            reference_id: referenceId
+          };
+          const retryRes = await supabase.from('transactions').insert([minimalPayload]);
+          txError = retryRes.error;
+        }
 
         if (txError) throw txError;
 
-        // 2) Simpan detail transaksi (per‑item)
+        // 2) Simpan detail transaksi (per‑item) jika ada tabel transaction_details
         const detailRows = formattedItems.map((fi) => ({
           receipt_no: receiptNo,
           product_id: fi.productId,
@@ -580,7 +622,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .insert(detailRows);
 
         if (detailError) {
-          console.warn('Detail transaksi gagal disimpan:', detailError);
+          console.warn('Detail transaksi gagal disimpan (opsional):', detailError.message);
         }
 
         newTx.isSynced = true;

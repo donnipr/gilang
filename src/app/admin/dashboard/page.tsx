@@ -435,26 +435,26 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="d-flex flex-column flex-md-row text-white min-vh-100">
+    <div className="d-flex flex-column flex-md-row text-slate-900 bg-slate-50 min-vh-100">
       {/* Sidebar Navigasi */}
       <Sidebar />
 
       {/* Main Container Dashboard */}
-      <main className="flex-grow-1 p-4 bg-pizza-bg main-content-responsive">
+      <main className="flex-grow-1 p-4 bg-slate-50 main-content-responsive">
         
         {/* Header Admin */}
         <header className="d-flex justify-content-between align-items-center mb-4 gap-3 flex-wrap">
           <div>
-            <h1 className="h3 fw-bold m-0 text-white">Dashboard Owner / Admin</h1>
-            <p className="text-muted m-0" style={{ fontSize: '0.9rem' }}>Pantau performa penjualan, tren produk terlaris, dan riwayat transaksi</p>
+            <h1 className="h3 font-bold m-0 text-slate-900">Dashboard Owner / Admin</h1>
+            <p className="text-slate-500 m-0" style={{ fontSize: '0.9rem' }}>Pantau performa penjualan, tren produk terlaris, dan riwayat transaksi</p>
           </div>
           
           <button 
-            className="btn btn-outline-secondary text-white border-pizza gap-2 d-flex align-items-center"
+            className="btn bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold border-0 shadow-sm gap-2 d-flex align-items-center py-2 px-3"
             onClick={() => loadTransactions()}
             style={{ borderRadius: '12px', fontSize: '0.85rem' }}
           >
-            <i className="bi bi-arrow-repeat text-orange"></i>
+            <i className="bi bi-arrow-repeat text-slate-900"></i>
             <span>Refresh Data Transaksi</span>
           </button>
         </header>
@@ -464,60 +464,60 @@ export default function DashboardPage() {
           
           {/* Card Pendapatan Hari Ini */}
           <div className="col-xl-3 col-sm-6">
-            <div className="card dashboard-card bg-pizza-card border-pizza p-3 h-100">
+            <div className="card dashboard-card bg-white border border-slate-200 shadow-sm p-3 h-100">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="text-muted small fw-semibold">PENDAPATAN HARI INI</span>
-                <div className="bg-success bg-opacity-10 text-success p-2 rounded">
+                <span className="text-slate-500 small font-semibold">PENDAPATAN HARI INI</span>
+                <div className="bg-yellow-400 text-slate-900 p-2 rounded-lg">
                   <i className="bi bi-wallet2 fs-5"></i>
                 </div>
               </div>
-              <h3 className="fw-bold m-0 text-white">{formatPrice(revenueToday)}</h3>
-              <span className="text-success small mt-2 d-block">
-                <i className="bi bi-graph-up me-1"></i>Live update dari kasir
+              <h3 className="font-bold m-0 text-slate-800">{formatPrice(revenueToday)}</h3>
+              <span className="text-slate-500 small mt-2 d-block">
+                <i className="bi bi-graph-up me-1 text-slate-900"></i>Live update dari kasir
               </span>
             </div>
           </div>
 
           {/* Card Pendapatan Minggu Ini */}
           <div className="col-xl-3 col-sm-6">
-            <div className="card dashboard-card bg-pizza-card border-pizza p-3 h-100">
+            <div className="card dashboard-card bg-white border border-slate-200 shadow-sm p-3 h-100">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="text-muted small fw-semibold">PENDAPATAN MINGGU INI</span>
-                <div className="bg-pizza-primary bg-opacity-10 text-orange p-2 rounded">
+                <span className="text-slate-500 small font-semibold">PENDAPATAN MINGGU INI</span>
+                <div className="bg-slate-100 text-slate-900 p-2 rounded-lg">
                   <i className="bi bi-calendar2-range fs-5"></i>
                 </div>
               </div>
-              <h3 className="fw-bold m-0 text-white">{formatPrice(revenueWeek)}</h3>
-              <span className="text-muted small mt-2 d-block">7 Hari ke belakang</span>
+              <h3 className="font-bold m-0 text-slate-800">{formatPrice(revenueWeek)}</h3>
+              <span className="text-slate-500 small mt-2 d-block">7 Hari ke belakang</span>
             </div>
           </div>
 
           {/* Card Pendapatan Bulan Ini */}
           <div className="col-xl-3 col-sm-6">
-            <div className="card dashboard-card bg-pizza-card border-pizza p-3 h-100">
+            <div className="card dashboard-card bg-white border border-slate-200 shadow-sm p-3 h-100">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="text-muted small fw-semibold">PENDAPATAN BULAN INI</span>
-                <div className="bg-warning bg-opacity-10 text-yellow p-2 rounded">
+                <span className="text-slate-500 small font-semibold">PENDAPATAN BULAN INI</span>
+                <div className="bg-yellow-400 text-slate-900 p-2 rounded-lg">
                   <i className="bi bi-graph-up-arrow fs-5"></i>
                 </div>
               </div>
-              <h3 className="fw-bold m-0 text-white">{formatPrice(revenueMonth)}</h3>
-              <span className="text-muted small mt-2 d-block">30 Hari terakhir</span>
+              <h3 className="font-bold m-0 text-slate-800">{formatPrice(revenueMonth)}</h3>
+              <span className="text-slate-500 small mt-2 d-block">30 Hari terakhir</span>
             </div>
           </div>
 
           {/* Card Pizza Terjual */}
           <div className="col-xl-3 col-sm-6">
-            <div className="card dashboard-card bg-pizza-card border-pizza p-3 h-100">
+            <div className="card dashboard-card bg-white border border-slate-200 shadow-sm p-3 h-100">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="text-muted small fw-semibold">PIZZA TERJUAL (BULAN INI)</span>
-                <div className="bg-danger bg-opacity-10 text-danger p-2 rounded">
+                <span className="text-slate-500 small font-semibold">PIZZA TERJUAL (BULAN INI)</span>
+                <div className="bg-slate-900 text-yellow-400 p-2 rounded-lg">
                   <i className="bi bi-pie-chart-fill fs-5"></i>
                 </div>
               </div>
-              <h3 className="fw-bold m-0 text-white">{totalPizzasSold} Loyang</h3>
-              <span className="text-danger small mt-2 d-block">
-                <i className="bi bi-fire me-1"></i>Menu Terlaris
+              <h3 className="font-bold m-0 text-slate-800">{totalPizzasSold} Loyang</h3>
+              <span className="text-slate-500 small mt-2 d-block">
+                <i className="bi bi-fire me-1 text-slate-900"></i>Menu Terlaris
               </span>
             </div>
           </div>
@@ -529,12 +529,12 @@ export default function DashboardPage() {
           
           {/* Tren Penjualan Harian (Chart Custom CSS/HTML) */}
           <div className="col-lg-8">
-            <div className="card bg-pizza-card border-pizza p-4 h-100" style={{ borderRadius: '16px' }}>
+            <div className="card bg-white border border-slate-200 shadow-sm p-4 h-100" style={{ borderRadius: '16px' }}>
               <div className="d-flex justify-content-between align-items-center mb-4">
-                <h5 className="fw-bold m-0 text-white">
-                  <i className="bi bi-activity text-orange me-2"></i>Tren Penjualan Harian (7 Hari Terakhir)
+                <h5 className="font-bold m-0 text-slate-900">
+                  <i className="bi bi-activity text-slate-900 me-2"></i>Tren Penjualan Harian (7 Hari Terakhir)
                 </h5>
-                <span className="badge bg-dark border border-pizza text-muted">Statistik Pendapatan</span>
+                <span className="badge bg-slate-100 border border-slate-200 text-slate-500">Statistik Pendapatan</span>
               </div>
               
               {/* Custom CSS Bar Graph */}
@@ -543,20 +543,19 @@ export default function DashboardPage() {
                   const barHeight = Math.round((data.total / maxDailyRevenue) * 100);
                   return (
                     <div key={idx} className="d-flex flex-column align-items-center flex-grow-1" style={{ maxWidth: '60px' }}>
-                      <div className="small text-orange fw-bold mb-2" style={{ fontSize: '0.75rem' }}>
+                      <div className="small text-slate-800 font-bold mb-2" style={{ fontSize: '0.75rem' }}>
                         {data.total > 0 ? `${(data.total / 1000).toFixed(0)}k` : '0'}
                       </div>
                       <div 
-                        className="bg-pizza-primary rounded-top position-relative w-50 bar-hover" 
+                        className="bg-yellow-400 rounded-top position-relative w-50 bar-hover" 
                         style={{ 
                           height: `${Math.max(barHeight, 5)}%`, 
                           minHeight: '8px',
-                          background: 'linear-gradient(to top, var(--pizza-primary), var(--pizza-secondary))',
-                          transition: 'height 0.8s ease',
-                          boxShadow: '0 0 10px rgba(255, 94, 54, 0.2)'
+                          backgroundColor: '#facc15',
+                          transition: 'height 0.8s ease'
                         }}
                       ></div>
-                      <div className="text-muted mt-2 text-center" style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
+                      <div className="text-slate-500 mt-2 text-center" style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
                         {data.label}
                       </div>
                     </div>
@@ -568,9 +567,9 @@ export default function DashboardPage() {
 
           {/* Top 3 Produk Terlaris */}
           <div className="col-lg-4">
-            <div className="card bg-pizza-card border-pizza p-4 h-100" style={{ borderRadius: '16px' }}>
-              <h5 className="fw-bold mb-4 text-white">
-                <i className="bi bi-award text-yellow me-2"></i>Top 3 Produk Terlaris
+            <div className="card bg-white border border-slate-200 shadow-sm p-4 h-100" style={{ borderRadius: '16px' }}>
+              <h5 className="font-bold mb-4 text-slate-900">
+                <i className="bi bi-award text-slate-900 me-2"></i>Top 3 Produk Terlaris
               </h5>
               
               {topProducts.length > 0 ? (
@@ -580,24 +579,24 @@ export default function DashboardPage() {
                     return (
                       <div key={idx}>
                         <div className="d-flex justify-content-between align-items-center mb-1">
-                          <span className="fw-bold small" style={{ fontSize: '0.9rem' }}>
+                          <span className="font-bold text-slate-900 small" style={{ fontSize: '0.9rem' }}>
                             {idx + 1}. {product.name}
                           </span>
-                          <span className="text-yellow small fw-semibold">{product.qty} Porsi</span>
+                          <span className="text-slate-800 small font-bold">{product.qty} Porsi</span>
                         </div>
-                        <div className="progress bg-dark" style={{ height: '10px', borderRadius: '5px', border: '1px solid var(--pizza-border)' }}>
+                        <div className="progress bg-slate-100" style={{ height: '10px', borderRadius: '5px', border: '1px solid #e2e8f0' }}>
                           <div 
                             className="progress-bar rounded-pill" 
                             role="progressbar" 
                             style={{ 
                               width: `${widthPct}%`, 
-                              backgroundColor: idx === 0 ? 'var(--pizza-primary)' : idx === 1 ? 'var(--pizza-secondary)' : '#6c757d'
+                              backgroundColor: idx === 0 ? '#facc15' : idx === 1 ? '#0f172a' : '#64748b'
                             }}
                           ></div>
                         </div>
                         <div className="d-flex justify-content-between align-items-center mt-1">
-                          <span className="text-muted small" style={{ fontSize: '0.75rem' }}>Nilai Omzet</span>
-                          <span className="text-muted small" style={{ fontSize: '0.75rem' }}>{formatPrice(product.sales)}</span>
+                          <span className="text-slate-500 small" style={{ fontSize: '0.75rem' }}>Nilai Omzet</span>
+                          <span className="font-bold text-slate-800 small" style={{ fontSize: '0.75rem' }}>{formatPrice(product.sales)}</span>
                         </div>
                       </div>
                     );
@@ -605,8 +604,8 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="text-center py-5">
-                  <i className="bi bi-pie-chart text-muted fs-2 mb-2 d-block"></i>
-                  <p className="text-muted small">Belum ada transaksi bulan ini.</p>
+                  <i className="bi bi-pie-chart text-slate-400 fs-2 mb-2 d-block"></i>
+                  <p className="text-slate-500 small">Belum ada transaksi bulan ini.</p>
                 </div>
               )}
             </div>
@@ -615,11 +614,11 @@ export default function DashboardPage() {
         </div>
 
         {/* TABEL RIWAYAT TRANSAKSI (BARIS BAWAH) */}
-        <div className="card bg-pizza-card border-pizza p-4" style={{ borderRadius: '16px' }}>
+        <div className="card bg-white border border-slate-200 shadow-sm p-4" style={{ borderRadius: '16px' }}>
           
           <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-            <h5 className="fw-bold m-0 text-white">
-              <i className="bi bi-clock-history text-orange me-2"></i>Riwayat Transaksi
+            <h5 className="font-bold m-0 text-slate-900">
+              <i className="bi bi-clock-history text-slate-900 me-2"></i>Riwayat Transaksi
             </h5>
             
             {/* Filter Tools (Search, Date Dropdown, Export Buttons) */}
@@ -699,9 +698,23 @@ export default function DashboardPage() {
                           <td className="py-3 text-center fw-medium">{tx.totalItems}</td>
                           <td className="py-3 text-end fw-bold text-yellow">{formatPrice(tx.total)}</td>
                           <td className="py-3 text-center">
-                            <span className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style={{ fontSize: '0.75rem' }}>
-                              Cash
-                            </span>
+                            {tx.paymentMethod === 'qris' ? (
+                              <span className="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1" style={{ fontSize: '0.75rem' }}>
+                                QRIS
+                              </span>
+                            ) : tx.paymentMethod === 'gofood' ? (
+                              <span className="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1" style={{ fontSize: '0.75rem' }}>
+                                GoFood
+                              </span>
+                            ) : tx.paymentMethod === 'grabfood' ? (
+                              <span className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style={{ fontSize: '0.75rem' }}>
+                                GrabFood
+                              </span>
+                            ) : (
+                              <span className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style={{ fontSize: '0.75rem' }}>
+                                Tunai
+                              </span>
+                            )}
                           </td>
                           <td className="py-3 text-center">
                             <button
